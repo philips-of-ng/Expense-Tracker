@@ -2,7 +2,7 @@ import { createContext, useState, useContext, useEffect } from "react";
 
 const AuthContext = createContext()
 
-export const AuthProvider = ({ children }) => {
+export const AuthContextProvider = ({ children }) => {
 
   const [user, setUser] = useState()
 
@@ -21,16 +21,14 @@ export const AuthProvider = ({ children }) => {
     console.log('AUTH CONTEXT IS WORKING');
   }, [])
 
+  const value = { user, setUser, login_AC, logout_AC }
 
   return (
-    <AuthContext.Provider value={{ login_AC, logout_AC, user }}>
+    <AuthContext.Provider value={value}>
       { children }
     </AuthContext.Provider>
   )
 }
 
-
-
-
-
+export default AuthContextProvider
 
