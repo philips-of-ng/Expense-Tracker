@@ -28,7 +28,9 @@ const Navbar = ({ page }) => {
       </div>
 
       <div className='flex-[1.7] flex align-middle justify-center relative'>
-        <button className='absolute bottom-8 border bg-amber-600 flex align-middle justify-center text-white rounded-full p-4'>
+        <button
+        onClick={() => setTab('new-shii')}
+        className='absolute bottom-8 border bg-amber-600 flex align-middle justify-center text-white rounded-full p-4'>
           <i class='bxr  bx-plus text-4xl'></i>
         </button>
       </div>
