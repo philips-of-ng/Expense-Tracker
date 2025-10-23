@@ -1,2 +1,7 @@
 @import "tailwindcss";
 
+@theme {
+  --color-appPurple: #42224a;
+  --color-appPurpleLight: #cfbbd4;
+}
+
