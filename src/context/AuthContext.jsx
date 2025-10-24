@@ -1,34 +1,102 @@
 import { createContext, useState, useContext, useEffect } from "react";
+import { 
+  onAuthStateChanged, 
+  signInWithEmailAndPassword, 
+  signOut, 
+  createUserWithEmailAndPassword, 
+  updateProfile, 
+  signInAnonymously 
+} from "firebase/auth";
+import { setDoc, doc, serverTimestamp } from "firebase/firestore";
+import { auth, db } from "../firebase"; // ✅ make sure firebase.js exports auth & db
 
-const AuthContext = createContext()
+// ✅ Create context
+const AuthContext = createContext();
 
+// ✅ Hook to use context
+export const useAuth = () => useContext(AuthContext);
+
+// ✅ Provider component
 const AuthContextProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const [user, setUser] = useState()
+  // 🔹 Sign Up
+  const signUp = async (name, email, password) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-  const login_AC = (userInfo) => {
-    localStorage.setItem('userInfo', userInfo)
-    setUser(userInfo)
+      await updateProfile(user, { displayName: name });
 
-    console.log('User info saved', userInfo);    
-  }
+      await setDoc(doc(db, "users", user.uid), {
+        name,
+        email,
+        createdAt: serverTimestamp(),
+      });
 
-  const logout_AC = () => {
-    localStorage.removeItem('userInfo')
-  }
+      setUser(user);
+      return user;
+    } catch (error) {
+      console.error("Signup error:", error);
+      throw error;
+    }
+  };
 
+  // 🔹 Login
+  const login = async (email, password) => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      setUser(userCredential.user);
+      return userCredential.user;
+    } catch (error) {
+      console.error("Login error:", error);
+      throw error;
+    }
+  };
+
+  // 🔹 Anonymous login (optional but you imported it)
+  const loginAnonymously = async () => {
+    try {
+      const userCredential = await signInAnonymously(auth);
+      setUser(userCredential.user);
+      return userCredential.user;
+    } catch (error) {
+      console.error("Anonymous login error:", error);
+      throw error;
+    }
+  };
+
+  // 🔹 Logout
+  const logout = async () => {
+    await signOut(auth);
+    setUser(null);
+  };
+
+  // 🔹 Track auth state
   useEffect(() => {
-    console.log('AUTH CONTEXT IS WORKING');
-  }, [])
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+    return unsubscribe;
+  }, []);
 
-  const value = { user, setUser, login_AC, logout_AC }
+  // 🔹 Context value
+  const value = {
+    user,
+    setUser,
+    signUp,
+    login,
+    logout,
+    loginAnonymously, // since it’s imported, we include it for completeness
+  };
 
   return (
     <AuthContext.Provider value={value}>
-      { children }
+      {!loading && children}
     </AuthContext.Provider>
-  )
-}
+  );
+};
 
-export default AuthContextProvider
-
+export default AuthContextProvider;

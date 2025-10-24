@@ -7,11 +7,14 @@ export const AppProvider = ({ children }) => {
 
   const [tab, setTab] = useState('home');
 
-    useEffect(() => {
+  useEffect(() => {
     console.log('This is the currrent tab', tab);
   }, [tab])
 
-  
+  const uploadNewExpense = async (payLoadObjact) => {
+    console.log('I GOT THE PAYLOAD', payLoadObjact);    
+  }
+
   return (
     <AppContext.Provider value={{ tab, setTab }}>
       {children}

@@ -518,8 +518,11 @@ const MainAppPage = () => {
 
                     <div className='flex justify-between align-middle gap-3 my-5'>
 
-                      <button className='text-lg font-semibold text-white bg-appPurple flex-1 p-1 rounded-3xl'>Cancel</button>
-                      <button className='text-lg font-semibold text-white bg-appPurple flex-1 p-1 rounded-3xl'>Save</button>
+                      <button onClick={() => setTab('home')} className='text-lg font-semibold text-white bg-appPurple flex-1 p-1 rounded-3xl'>Cancel</button>
+
+                      <button onClick={() => {
+                        
+                      }} className='text-lg font-semibold text-white bg-appPurple flex-1 p-1 rounded-3xl'>Save</button>
 
                     </div>
 
