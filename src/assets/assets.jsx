@@ -1,4 +1,5 @@
 const transactions = [
+  // Earlier this month
   {
     id: 'tx_001',
     title: 'Grocery Shopping',
@@ -6,7 +7,7 @@ const transactions = [
     category: 'Groceries',
     amount: 45.75,
     type: 'expense',
-    date: '2025-10-02T14:35:00Z',
+    date: '2025-10-03T14:35:00Z',
     imageUrl: '',
   },
   {
@@ -16,7 +17,7 @@ const transactions = [
     category: 'Income',
     amount: 250.0,
     type: 'income',
-    date: '2025-10-03T09:15:00Z',
+    date: '2025-10-04T09:15:00Z',
     imageUrl: '',
   },
   {
@@ -26,7 +27,7 @@ const transactions = [
     category: 'Utilities',
     amount: 28.4,
     type: 'expense',
-    date: '2025-10-04T08:10:00Z',
+    date: '2025-10-05T08:10:00Z',
     imageUrl: '',
   },
   {
@@ -36,7 +37,7 @@ const transactions = [
     category: 'Internet',
     amount: 8.2,
     type: 'expense',
-    date: '2025-10-05T10:25:00Z',
+    date: '2025-10-06T10:25:00Z',
     imageUrl: '',
   },
   {
@@ -46,7 +47,7 @@ const transactions = [
     category: 'Transport',
     amount: 35.0,
     type: 'expense',
-    date: '2025-10-06T07:50:00Z',
+    date: '2025-10-07T07:50:00Z',
     imageUrl: '',
   },
   {
@@ -56,7 +57,7 @@ const transactions = [
     category: 'Food & Drink',
     amount: 6.25,
     type: 'expense',
-    date: '2025-10-07T08:45:00Z',
+    date: '2025-10-08T08:45:00Z',
     imageUrl: '',
   },
   {
@@ -66,7 +67,7 @@ const transactions = [
     category: 'Fitness',
     amount: 30.0,
     type: 'expense',
-    date: '2025-10-08T17:00:00Z',
+    date: '2025-10-09T17:00:00Z',
     imageUrl: '',
   },
   {
@@ -76,7 +77,7 @@ const transactions = [
     category: 'Transport',
     amount: 12.0,
     type: 'expense',
-    date: '2025-10-09T13:20:00Z',
+    date: '2025-10-10T13:20:00Z',
     imageUrl: '',
   },
   {
@@ -86,7 +87,7 @@ const transactions = [
     category: 'Entertainment',
     amount: 9.99,
     type: 'expense',
-    date: '2025-10-10T18:00:00Z',
+    date: '2025-10-11T18:00:00Z',
     imageUrl: '',
   },
   {
@@ -96,7 +97,7 @@ const transactions = [
     category: 'Income',
     amount: 1200.0,
     type: 'income',
-    date: '2025-10-10T09:00:00Z',
+    date: '2025-10-11T09:00:00Z',
     imageUrl: '',
   },
   {
@@ -106,7 +107,7 @@ const transactions = [
     category: 'Utilities',
     amount: 3.5,
     type: 'expense',
-    date: '2025-10-11T12:30:00Z',
+    date: '2025-10-12T12:30:00Z',
     imageUrl: '',
   },
   {
@@ -116,7 +117,7 @@ const transactions = [
     category: 'Education',
     amount: 15.0,
     type: 'expense',
-    date: '2025-10-12T11:00:00Z',
+    date: '2025-10-13T11:00:00Z',
     imageUrl: '',
   },
   {
@@ -126,7 +127,7 @@ const transactions = [
     category: 'Education',
     amount: 39.99,
     type: 'expense',
-    date: '2025-10-13T15:30:00Z',
+    date: '2025-10-14T15:30:00Z',
     imageUrl: '',
   },
   {
@@ -136,7 +137,7 @@ const transactions = [
     category: 'Income',
     amount: 350.0,
     type: 'income',
-    date: '2025-10-14T16:10:00Z',
+    date: '2025-10-15T16:10:00Z',
     imageUrl: '',
   },
   {
@@ -146,7 +147,7 @@ const transactions = [
     category: 'Personal Care',
     amount: 5.5,
     type: 'expense',
-    date: '2025-10-15T13:00:00Z',
+    date: '2025-10-16T13:00:00Z',
     imageUrl: '',
   },
   {
@@ -156,7 +157,7 @@ const transactions = [
     category: 'Food & Drink',
     amount: 60.0,
     type: 'expense',
-    date: '2025-10-16T20:30:00Z',
+    date: '2025-10-17T20:30:00Z',
     imageUrl: '',
   },
   {
@@ -166,7 +167,7 @@ const transactions = [
     category: 'Income',
     amount: 80.0,
     type: 'income',
-    date: '2025-10-17T19:00:00Z',
+    date: '2025-10-18T19:00:00Z',
     imageUrl: '',
   },
   {
@@ -176,7 +177,7 @@ const transactions = [
     category: 'Health',
     amount: 25.0,
     type: 'expense',
-    date: '2025-10-18T10:00:00Z',
+    date: '2025-10-19T10:00:00Z',
     imageUrl: '',
   },
   {
@@ -186,7 +187,7 @@ const transactions = [
     category: 'Shopping',
     amount: 85.0,
     type: 'expense',
-    date: '2025-10-19T17:20:00Z',
+    date: '2025-10-20T17:20:00Z',
     imageUrl: '',
   },
   {
@@ -196,10 +197,11 @@ const transactions = [
     category: 'Entertainment',
     amount: 11.99,
     type: 'expense',
-    date: '2025-10-20T08:00:00Z',
+    date: '2025-10-21T08:00:00Z',
     imageUrl: '',
   },
-  // 👇 this week (Oct 21–23)
+
+  // 👇 this week (Oct 22–24)
   {
     id: 'tx_021',
     title: 'Groceries at Market Square',
@@ -207,7 +209,7 @@ const transactions = [
     category: 'Groceries',
     amount: 32.6,
     type: 'expense',
-    date: '2025-10-21T09:10:00Z',
+    date: '2025-10-22T09:10:00Z',
     imageUrl: '',
   },
   {
@@ -217,7 +219,7 @@ const transactions = [
     category: 'Income',
     amount: 400.0,
     type: 'income',
-    date: '2025-10-21T15:20:00Z',
+    date: '2025-10-22T15:20:00Z',
     imageUrl: '',
   },
   {
@@ -227,7 +229,7 @@ const transactions = [
     category: 'Transport',
     amount: 5.75,
     type: 'expense',
-    date: '2025-10-22T08:30:00Z',
+    date: '2025-10-23T08:30:00Z',
     imageUrl: '',
   },
   {
@@ -237,10 +239,11 @@ const transactions = [
     category: 'Utilities',
     amount: 3.0,
     type: 'expense',
-    date: '2025-10-22T19:45:00Z',
+    date: '2025-10-23T19:45:00Z',
     imageUrl: '',
   },
-  // 👇 today (Oct 23)
+
+  // 👇 today (Oct 24)
   {
     id: 'tx_025',
     title: 'Breakfast at Café',
@@ -248,7 +251,7 @@ const transactions = [
     category: 'Food & Drink',
     amount: 7.25,
     type: 'expense',
-    date: '2025-10-23T08:15:00Z',
+    date: '2025-10-24T08:15:00Z',
     imageUrl: '',
   },
   {
@@ -258,7 +261,7 @@ const transactions = [
     category: 'Subscription',
     amount: 20.0,
     type: 'expense',
-    date: '2025-10-23T10:05:00Z',
+    date: '2025-10-24T10:05:00Z',
     imageUrl: '',
   },
   {
@@ -268,7 +271,7 @@ const transactions = [
     category: 'Income',
     amount: 60.0,
     type: 'income',
-    date: '2025-10-23T11:50:00Z',
+    date: '2025-10-24T11:50:00Z',
     imageUrl: '',
   },
   {
@@ -278,7 +281,7 @@ const transactions = [
     category: 'Food & Drink',
     amount: 10.5,
     type: 'expense',
-    date: '2025-10-23T13:40:00Z',
+    date: '2025-10-24T13:40:00Z',
     imageUrl: '',
   },
   {
@@ -288,7 +291,7 @@ const transactions = [
     category: 'Charity',
     amount: 15.0,
     type: 'expense',
-    date: '2025-10-23T16:10:00Z',
+    date: '2025-10-24T16:10:00Z',
     imageUrl: '',
   },
   {
@@ -298,7 +301,38 @@ const transactions = [
     category: 'Income',
     amount: 120.0,
     type: 'income',
-    date: '2025-10-23T18:20:00Z',
+    date: '2025-10-24T18:20:00Z',
+    imageUrl: '',
+  },
+  // New for today
+  {
+    id: 'tx_031',
+    title: 'Evening Snacks',
+    description: 'Meat pie and bottle of malt',
+    category: 'Food & Drink',
+    amount: 4.5,
+    type: 'expense',
+    date: '2025-10-24T19:30:00Z',
+    imageUrl: '',
+  },
+  {
+    id: 'tx_032',
+    title: 'Domain Renewal',
+    description: 'Renewed philipsportfolio.dev domain',
+    category: 'Subscription',
+    amount: 12.0,
+    type: 'expense',
+    date: '2025-10-24T20:00:00Z',
+    imageUrl: '',
+  },
+  {
+    id: 'tx_033',
+    title: 'Consultation Fee',
+    description: 'Client paid for UX design consultation',
+    category: 'Income',
+    amount: 75.0,
+    type: 'income',
+    date: '2025-10-24T21:10:00Z',
     imageUrl: '',
   },
 ];

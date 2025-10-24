@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import Navbar from './components/Navbar'
 import MainAppPage from './pages/MainAppPage'
+import StatisticsPage from './components/StatisticsPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -11,6 +12,8 @@ function App() {
   return (
     <div className='w-screen border-green-800'>
       <MainAppPage />
+
+      {/* <StatisticsPage /> */}
     </div>
   )
 }
