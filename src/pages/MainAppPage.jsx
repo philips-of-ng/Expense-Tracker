@@ -12,6 +12,9 @@ const MainAppPage = () => {
 
   //GENERAL CODES --- GENERAL CODES --- GENERAL CODES
 
+  //IMPORTING FUNCTIONS FROM CONTEXTS
+  const { uploadNewExpense } = useAppContext()
+
   //this is used to set the active page -- home, receipts, charts, reminders
   const { tab, setTab } = useAppContext()
 
@@ -520,8 +523,8 @@ const MainAppPage = () => {
 
                       <button onClick={() => setTab('home')} className='text-lg font-semibold text-white bg-appPurple flex-1 p-1 rounded-3xl'>Cancel</button>
 
-                      <button onClick={() => {
-                        
+                      <button type='button' onClick={() => {
+                        uploadNewExpense(expenseInfo)
                       }} className='text-lg font-semibold text-white bg-appPurple flex-1 p-1 rounded-3xl'>Save</button>
 
                     </div>
