@@ -1,5 +1,4 @@
 const transactions = [
-  // Earlier this month
   {
     id: 'tx_001',
     title: 'Grocery Shopping',
@@ -8,17 +7,17 @@ const transactions = [
     amount: 45.75,
     type: 'expense',
     date: '2025-10-03T14:35:00Z',
-    imageUrl: '',
+    icon: 'bx bx-cart-alt',
   },
   {
     id: 'tx_002',
     title: 'Freelance Payment',
     description: 'Received payment for website design project',
-    category: 'Income',
+    category: 'Freelance',
     amount: 250.0,
     type: 'income',
     date: '2025-10-04T09:15:00Z',
-    imageUrl: '',
+    icon: 'bx bx-briefcase-alt',
   },
   {
     id: 'tx_003',
@@ -28,7 +27,7 @@ const transactions = [
     amount: 28.4,
     type: 'expense',
     date: '2025-10-05T08:10:00Z',
-    imageUrl: '',
+    icon: 'bx bx-bulb',
   },
   {
     id: 'tx_004',
@@ -38,7 +37,7 @@ const transactions = [
     amount: 8.2,
     type: 'expense',
     date: '2025-10-06T10:25:00Z',
-    imageUrl: '',
+    icon: 'bx bx-wifi',
   },
   {
     id: 'tx_005',
@@ -48,7 +47,7 @@ const transactions = [
     amount: 35.0,
     type: 'expense',
     date: '2025-10-07T07:50:00Z',
-    imageUrl: '',
+    icon: 'bx bx-gas-pump',
   },
   {
     id: 'tx_006',
@@ -58,7 +57,7 @@ const transactions = [
     amount: 6.25,
     type: 'expense',
     date: '2025-10-08T08:45:00Z',
-    imageUrl: '',
+    icon: 'bx bx-coffee',
   },
   {
     id: 'tx_007',
@@ -68,7 +67,7 @@ const transactions = [
     amount: 30.0,
     type: 'expense',
     date: '2025-10-09T17:00:00Z',
-    imageUrl: '',
+    icon: 'bx bx-dumbbell',
   },
   {
     id: 'tx_008',
@@ -78,7 +77,7 @@ const transactions = [
     amount: 12.0,
     type: 'expense',
     date: '2025-10-10T13:20:00Z',
-    imageUrl: '',
+    icon: 'bx bx-taxi',
   },
   {
     id: 'tx_009',
@@ -88,17 +87,17 @@ const transactions = [
     amount: 9.99,
     type: 'expense',
     date: '2025-10-11T18:00:00Z',
-    imageUrl: '',
+    icon: 'bx bx-movie-play',
   },
   {
     id: 'tx_010',
     title: 'Salary',
     description: 'October salary payment',
-    category: 'Income',
+    category: 'Salary',
     amount: 1200.0,
     type: 'income',
     date: '2025-10-11T09:00:00Z',
-    imageUrl: '',
+    icon: 'bx bx-wallet',
   },
   {
     id: 'tx_011',
@@ -108,7 +107,7 @@ const transactions = [
     amount: 3.5,
     type: 'expense',
     date: '2025-10-12T12:30:00Z',
-    imageUrl: '',
+    icon: 'bx bx-mobile',
   },
   {
     id: 'tx_012',
@@ -118,7 +117,7 @@ const transactions = [
     amount: 15.0,
     type: 'expense',
     date: '2025-10-13T11:00:00Z',
-    imageUrl: '',
+    icon: 'bx bx-book',
   },
   {
     id: 'tx_013',
@@ -128,17 +127,17 @@ const transactions = [
     amount: 39.99,
     type: 'expense',
     date: '2025-10-14T15:30:00Z',
-    imageUrl: '',
+    icon: 'bx bx-laptop',
   },
   {
     id: 'tx_014',
     title: 'Sold Old Laptop',
     description: 'Sold my old HP Pavilion laptop',
-    category: 'Income',
+    category: 'Investments',
     amount: 350.0,
     type: 'income',
     date: '2025-10-15T16:10:00Z',
-    imageUrl: '',
+    icon: 'bx bx-trending-up',
   },
   {
     id: 'tx_015',
@@ -148,7 +147,7 @@ const transactions = [
     amount: 5.5,
     type: 'expense',
     date: '2025-10-16T13:00:00Z',
-    imageUrl: '',
+    icon: 'bx bx-user',
   },
   {
     id: 'tx_016',
@@ -158,17 +157,17 @@ const transactions = [
     amount: 60.0,
     type: 'expense',
     date: '2025-10-17T20:30:00Z',
-    imageUrl: '',
+    icon: 'bx bx-restaurant',
   },
   {
     id: 'tx_017',
     title: 'Sold Graphic Design',
     description: 'Payment for logo design project',
-    category: 'Income',
+    category: 'Freelance',
     amount: 80.0,
     type: 'income',
     date: '2025-10-18T19:00:00Z',
-    imageUrl: '',
+    icon: 'bx bx-briefcase-alt',
   },
   {
     id: 'tx_018',
@@ -178,7 +177,7 @@ const transactions = [
     amount: 25.0,
     type: 'expense',
     date: '2025-10-19T10:00:00Z',
-    imageUrl: '',
+    icon: 'bx bx-health',
   },
   {
     id: 'tx_019',
@@ -188,7 +187,7 @@ const transactions = [
     amount: 85.0,
     type: 'expense',
     date: '2025-10-20T17:20:00Z',
-    imageUrl: '',
+    icon: 'bx bx-shopping-bag',
   },
   {
     id: 'tx_020',
@@ -198,10 +197,8 @@ const transactions = [
     amount: 11.99,
     type: 'expense',
     date: '2025-10-21T08:00:00Z',
-    imageUrl: '',
+    icon: 'bx bx-play-circle',
   },
-
-  // 👇 this week (Oct 22–24)
   {
     id: 'tx_021',
     title: 'Groceries at Market Square',
@@ -210,17 +207,17 @@ const transactions = [
     amount: 32.6,
     type: 'expense',
     date: '2025-10-22T09:10:00Z',
-    imageUrl: '',
+    icon: 'bx bx-cart-alt',
   },
   {
     id: 'tx_022',
     title: 'Client Invoice Payment',
     description: 'Received project balance from client',
-    category: 'Income',
+    category: 'Freelance',
     amount: 400.0,
     type: 'income',
     date: '2025-10-22T15:20:00Z',
-    imageUrl: '',
+    icon: 'bx bx-briefcase-alt',
   },
   {
     id: 'tx_023',
@@ -230,7 +227,7 @@ const transactions = [
     amount: 5.75,
     type: 'expense',
     date: '2025-10-23T08:30:00Z',
-    imageUrl: '',
+    icon: 'bx bx-taxi',
   },
   {
     id: 'tx_024',
@@ -240,10 +237,8 @@ const transactions = [
     amount: 3.0,
     type: 'expense',
     date: '2025-10-23T19:45:00Z',
-    imageUrl: '',
+    icon: 'bx bx-mobile',
   },
-
-  // 👇 today (Oct 24)
   {
     id: 'tx_025',
     title: 'Breakfast at Café',
@@ -252,7 +247,7 @@ const transactions = [
     amount: 7.25,
     type: 'expense',
     date: '2025-10-24T08:15:00Z',
-    imageUrl: '',
+    icon: 'bx bx-coffee',
   },
   {
     id: 'tx_026',
@@ -262,17 +257,17 @@ const transactions = [
     amount: 20.0,
     type: 'expense',
     date: '2025-10-24T10:05:00Z',
-    imageUrl: '',
+    icon: 'bx bx-globe',
   },
   {
     id: 'tx_027',
     title: 'UI Design Sale',
     description: 'Sold mobile UI design pack on Gumroad',
-    category: 'Income',
+    category: 'Investments',
     amount: 60.0,
     type: 'income',
     date: '2025-10-24T11:50:00Z',
-    imageUrl: '',
+    icon: 'bx bx-trending-up',
   },
   {
     id: 'tx_028',
@@ -282,7 +277,7 @@ const transactions = [
     amount: 10.5,
     type: 'expense',
     date: '2025-10-24T13:40:00Z',
-    imageUrl: '',
+    icon: 'bx bx-restaurant',
   },
   {
     id: 'tx_029',
@@ -292,19 +287,18 @@ const transactions = [
     amount: 15.0,
     type: 'expense',
     date: '2025-10-24T16:10:00Z',
-    imageUrl: '',
+    icon: 'bx bx-donate-heart',
   },
   {
     id: 'tx_030',
     title: 'Sold Plugin',
     description: 'Received payment for custom VS Code plugin',
-    category: 'Income',
+    category: 'Investments',
     amount: 120.0,
     type: 'income',
     date: '2025-10-24T18:20:00Z',
-    imageUrl: '',
+    icon: 'bx bx-trending-up',
   },
-  // New for today
   {
     id: 'tx_031',
     title: 'Evening Snacks',
@@ -313,7 +307,7 @@ const transactions = [
     amount: 4.5,
     type: 'expense',
     date: '2025-10-24T19:30:00Z',
-    imageUrl: '',
+    icon: 'bx bx-baguette',
   },
   {
     id: 'tx_032',
@@ -323,17 +317,17 @@ const transactions = [
     amount: 12.0,
     type: 'expense',
     date: '2025-10-24T20:00:00Z',
-    imageUrl: '',
+    icon: 'bx bx-globe',
   },
   {
     id: 'tx_033',
     title: 'Consultation Fee',
     description: 'Client paid for UX design consultation',
-    category: 'Income',
+    category: 'Gift',
     amount: 75.0,
     type: 'income',
     date: '2025-10-24T21:10:00Z',
-    imageUrl: '',
+    icon: 'bx bx-gift',
   },
 ];
 

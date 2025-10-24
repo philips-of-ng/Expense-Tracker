@@ -5,13 +5,18 @@ import { useAppContext } from '../context/AppContext'
 
 import transactions from '../assets/assets'
 import TransactionChart from '../components/TransactionChart'
+import ExpenseBreakdown from '../components/ExpenseBreakdown'
+import IncomeBreakdown from '../components/IncomeBreakdown'
 
 const MainAppPage = () => {
+
+  //GENERAL CODES --- GENERAL CODES --- GENERAL CODES
 
   //this is used to set the active page -- home, receipts, charts, reminders
   const { tab, setTab } = useAppContext()
 
 
+  //HOME PAGE CODES
   // nav and tab for the transactions
   const [showingTrans, setShowingTrans] = useState('Today')
 
@@ -71,6 +76,28 @@ const MainAppPage = () => {
   const thisMonthTransactions = getThisMonthTransactions(transactions)
 
 
+  //RECEIPT PAGE CODESSSSSSSSSS
+
+  const [query, setQuery] = useState("");
+  const [filtered, setFiltered] = useState([]);
+
+  useEffect(() => {
+    if (query.trim() === "") {
+      setFiltered([]); // empty search → no results
+      return;
+    }
+
+    const results = transactions.filter((tx) =>
+      [tx.title, tx.description, tx.category].some((field) =>
+        field.toLowerCase().includes(query.toLowerCase())
+      )
+    );
+
+    setFiltered(results);
+  }, [query]);
+
+
+
 
   // THE FOLLOWING CODE IS FOR THE ADD NEW PAGE
   // THE FOLLOWING CODE IS FOR THE ADD NEW PAGE
@@ -90,7 +117,7 @@ const MainAppPage = () => {
   })
 
   useEffect(() => {
-    console.log('Updating expense info', expenseInfo);
+    console.log('Updating transaction info', expenseInfo);
   }, [expenseInfo])
 
 
@@ -182,24 +209,24 @@ const MainAppPage = () => {
                   showingTrans == 'Today' ? (
                     <>
                       {
-                        todayTransactions.map((expense, index) => (
+                        todayTransactions.map((transaction, index) => (
                           <>
                             <div key={index} className='one-trans flex justify-between align-middle py-3.5'>
 
                               <div className='flex align-middle justify-start gap-2.5 min-w-0'>
-                                <div className='min-w-14 min-h-14 border-2 border-green-400 rounded-full'>
-
+                                <div className='min-w-14 min-h-14 bg-appPurpleLight  rounded-full flex justify-center align-middle'>
+                                  <button><i class={`${transaction.icon} text-appPurple text-2xl`}></i></button>
                                 </div>
 
                                 <div className='min-w-0'>
-                                  <p className='text-xl font-semibold'>{expense.title}</p>
-                                  <p className='text-gray-500 truncate'>{expense.description}</p>
+                                  <p className='text-xl font-semibold'>{transaction.title}</p>
+                                  <p className='text-gray-500 truncate'>{transaction.description}</p>
                                 </div>
                               </div>
 
 
                               <div className='flex align-middle'>
-                                <span className='text-xl flex align-middle'>${expense.amount}</span>
+                                <span className='text-xl flex align-middle'>{transaction.type === 'income' ? '+' : ''}${transaction.amount}</span>
                               </div>
                             </div>
                           </>
@@ -209,24 +236,24 @@ const MainAppPage = () => {
                   ) : showingTrans == 'Weekly' ? (
                     <>
                       {
-                        thisWeekTransactions.map((expense, index) => (
+                        thisWeekTransactions.map((transaction, index) => (
                           <>
                             <div key={index} className='one-trans flex justify-between align-middle py-3.5'>
 
                               <div className='flex align-middle justify-start gap-2.5 min-w-0'>
-                                <div className='min-w-14 min-h-14 border-2 border-green-400 rounded-full'>
-
+                                <div className='min-w-14 min-h-14 bg-appPurpleLight  rounded-full flex justify-center align-middle'>
+                                  <button><i class={`${transaction.icon} text-appPurple text-2xl`}></i></button>
                                 </div>
 
                                 <div className='min-w-0'>
-                                  <p className='text-xl font-semibold'>{expense.title}</p>
-                                  <p className='text-gray-500 truncate'>{expense.description}</p>
+                                  <p className='text-xl font-semibold'>{transaction.title}</p>
+                                  <p className='text-gray-500 truncate'>{transaction.description}</p>
                                 </div>
                               </div>
 
 
                               <div className='flex align-middle'>
-                                <span className='text-xl flex align-middle'>${expense.amount}</span>
+                                <span className='text-xl flex align-middle'>{transaction.type === 'income' ? '+' : ''}${transaction.amount}</span>
                               </div>
                             </div>
                           </>
@@ -236,24 +263,24 @@ const MainAppPage = () => {
                   ) : showingTrans == 'Monthly' ? (
                     <>
                       {
-                        thisMonthTransactions.map((expense, index) => (
+                        thisMonthTransactions.map((transaction, index) => (
                           <>
                             <div key={index} className='one-trans flex justify-between align-middle py-3.5'>
 
                               <div className='flex align-middle justify-start gap-2.5 min-w-0'>
-                                <div className='min-w-14 min-h-14 border-2 border-green-400 rounded-full'>
-
+                                <div className='min-w-14 min-h-14 bg-appPurpleLight  rounded-full flex justify-center align-middle'>
+                                  <button><i class={`${transaction.icon} text-appPurple text-2xl`}></i></button>
                                 </div>
 
                                 <div className='min-w-0'>
-                                  <p className='text-xl font-semibold'>{expense.title}</p>
-                                  <p className='text-gray-500 truncate'>{expense.description}</p>
+                                  <p className='text-xl font-semibold'>{transaction.title}</p>
+                                  <p className='text-gray-500 truncate'>{transaction.description}</p>
                                 </div>
                               </div>
 
 
                               <div className='flex align-middle'>
-                                <span className='text-xl flex align-middle'>${expense.amount}</span>
+                                <span className='text-xl flex align-middle'>{transaction.type === 'income' ? '+' : ''}${transaction.amount}</span>
                               </div>
                             </div>
                           </>
@@ -288,7 +315,9 @@ const MainAppPage = () => {
 
             {/* SEARCH SYSTEM */}
             <div className='w-full flex align-middle justify-between my-5 bg-gray-200 rounded-3xl h-10 px-4'>
-              <input className='w-[80%] outline-0' type="text" />
+              <input placeholder="Search by title, description, or category..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)} className='w-[80%] outline-0' type="text" />
 
               <button className=''>
                 <i className='bxr  bx-search text-2xl'  ></i>
@@ -299,30 +328,58 @@ const MainAppPage = () => {
 
             <div className='border-2 border-green-500'>
 
-
               {
-                transactions.map((expense, index) => (
-                  <div key={index} className='one-receipt flex justify-between my-2'>
-                    <div className='flex justify-start align-middle gap-2 min-w-0'>
+                filtered.length > 0 ? (
 
-                      <div className='min-h-20 min-w-20 border-2 border-blue-600'>
+                  filtered.map((transaction, index) => (
+                    <div key={index} className='one-receipt flex justify-between my-2'>
+                      <div className='flex justify-start align-middle gap-2 min-w-0'>
+
+                        <div className='min-h-20 min-w-20 border-2 border-blue-600'>
+
+                        </div>
+
+                        <div className='min-w-0'>
+                          <p className='text-lg font-semibold text-gray-600'>{transaction.title}</p>
+                          <p className='text-appPurple font-bold'>{convertDate(transaction.date)}</p>
+                          <p className='text-gray-500 truncate'>{transaction.description}</p>
+                        </div>
 
                       </div>
 
-                      <div className='min-w-0'>
-                        <p className='text-lg font-semibold text-gray-600'>{expense.title}</p>
-                        <p className='text-appPurple font-bold'>{convertDate(expense.date)}</p>
-                        <p className='text-gray-500 truncate'>{expense.description}</p>
+                      <div>
+                        <button></button>
+                      </div>
+                    </div>
+                  ))
+
+                ) : (
+
+                  transactions.map((transaction, index) => (
+                    <div key={index} className='one-receipt flex justify-between my-2'>
+                      <div className='flex justify-start align-middle gap-2 min-w-0'>
+
+                        <div className='min-h-20 min-w-20 border-2 border-blue-600'>
+
+                        </div>
+
+                        <div className='min-w-0'>
+                          <p className='text-lg font-semibold text-gray-600'>{transaction.title}</p>
+                          <p className='text-appPurple font-bold'>{convertDate(transaction.date)}</p>
+                          <p className='text-gray-500 truncate'>{transaction.description}</p>
+                        </div>
+
                       </div>
 
+                      <div>
+                        <button></button>
+                      </div>
                     </div>
+                  ))
 
-                    <div>
-                      <button></button>
-                    </div>
-                  </div>
-                ))
+                )
               }
+
 
 
             </div>
@@ -643,42 +700,11 @@ const MainAppPage = () => {
             </div>
 
             {/* Chart + Breakdown Section */}
-            <div className="bg-white shadow rounded-2xl p-5 flex flex-col md:flex-row gap-6 border border-[--color-appPurpleLight]">
-              {/* Chart placeholder */}
-              <div className="flex-1 flex flex-col items-center justify-center border border-dashed border-[--color-appPurpleLight] rounded-xl p-6">
-                {/* <p className="text-gray-500 text-sm">
+            <TransactionChart />
 
-                </p> */}
+            <ExpenseBreakdown />
 
-                <TransactionChart />
-
-
-                <p className="text-gray-400 text-xs mt-2">You can replace this with Recharts later</p>
-              </div>
-
-              {/* Category List */}
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-[--color-appPurple] mb-3">Category Breakdown</h3>
-                <ul className="flex flex-col gap-3">
-                  <li className="flex justify-between text-gray-600">
-                    <span>Food</span>
-                    <span>$420 (38%)</span>
-                  </li>
-                  <li className="flex justify-between text-gray-600">
-                    <span>Bills</span>
-                    <span>$280 (25%)</span>
-                  </li>
-                  <li className="flex justify-between text-gray-600">
-                    <span>Transport</span>
-                    <span>$150 (13%)</span>
-                  </li>
-                  <li className="flex justify-between text-gray-600">
-                    <span>Entertainment</span>
-                    <span>$90 (8%)</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
+            <IncomeBreakdown />
 
             {/* Insight Box */}
             <div className="bg-[--color-appPurple] text-white p-5 rounded-2xl shadow">

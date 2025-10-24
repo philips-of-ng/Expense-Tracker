@@ -1,4 +1,3 @@
-// src/components/TransactionChart.jsx
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import {
@@ -46,9 +45,33 @@ const TransactionChart = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-6 p-4 bg-white rounded-2xl shadow">
-      <Bar data={data} options={options} />
+    <div className="bg-white shadow rounded-2xl p-5 flex flex-col md:flex-row gap-6 border border-[--color-appPurpleLight]">
+
+      <div className="max-w-md mx-auto p-3 bg-white rounded-2xl shadow">
+        <Bar data={data} options={options} />
+      </div>
+
+      {/* Category List */}
+      <div className="flex-1">
+        <h3 className="text-lg font-semibold text-[--color-appPurple] mb-3">Context</h3>
+        <ul className="flex flex-col gap-3">
+          <li className="flex justify-between text-gray-600">
+            <span>Income</span>
+            <span>${totalIncome}</span>
+          </li>
+          <li className="flex justify-between text-gray-600">
+            <span>Expense</span>
+            <span>${Number(totalExpense.toFixed(2))}</span>
+          </li>
+          <li className="flex justify-between text-gray-600">
+            <span>Net Balance</span>
+            <span>${totalIncome - totalExpense}</span>
+          </li>
+          
+        </ul>
+      </div>
     </div>
+
   );
 };
 

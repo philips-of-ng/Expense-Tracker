@@ -30,7 +30,7 @@ const Navbar = ({ page }) => {
       <div className='flex-[1.7] flex align-middle justify-center relative'>
         <button
         onClick={() => setTab('new-shii')}
-        className='absolute bottom-8 border bg-amber-600 flex align-middle justify-center text-white rounded-full p-4'>
+        className={`${page == 'new-shii' ? 'border-2 border-appPurple' : ''} absolute bottom-8 bg-amber-600 flex align-middle justify-center text-white rounded-full p-4`}>
           <i className='bxr  bx-plus text-4xl'></i>
         </button>
       </div>
