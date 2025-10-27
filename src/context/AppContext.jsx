@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 // import { uploadImage } from 'firebase/firestore'
 
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "../firebase";
+import {  } from "../firebase";
 
 const AppContext = createContext();
 
