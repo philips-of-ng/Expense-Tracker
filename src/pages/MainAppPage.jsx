@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import Navbar from '../components/Navbar'
-import AuthContextProvider from '../context/AuthContext'
+import AuthContextProvider, { useAuth } from '../context/AuthContext'
 import { useAppContext } from '../context/AppContext'
 
 import transactions from '../assets/assets'
@@ -12,8 +12,11 @@ const MainAppPage = () => {
 
   //GENERAL CODES --- GENERAL CODES --- GENERAL CODES
 
+
   //IMPORTING FUNCTIONS FROM CONTEXTS
   const { uploadNewExpense } = useAppContext()
+
+  const { userData } = useAuth()
 
   //this is used to set the active page -- home, receipts, charts, reminders
   const { tab, setTab } = useAppContext()
@@ -158,7 +161,7 @@ const MainAppPage = () => {
               <div className='flex justify-between'>
                 <div>
                   <p>Hello, <b>Philips</b></p>
-                  <h1 className='text-4xl font-bold'>$12,550.55</h1>
+                  <h1 className='text-4xl font-bold'>${userData.balance.toLocaleString()}</h1>
                 </div>
 
                 <h2 className='text-center'>October, 2025</h2>

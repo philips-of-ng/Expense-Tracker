@@ -1,27 +1,29 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import { 
-  onAuthStateChanged, 
-  signInWithEmailAndPassword, 
-  signOut, 
-  createUserWithEmailAndPassword, 
-  updateProfile, 
-  signInAnonymously 
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  createUserWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
-import { setDoc, doc, serverTimestamp } from "firebase/firestore";
-import { auth, db } from "../firebase"; // ✅ make sure firebase.js exports auth & db
+import {
+  setDoc,
+  doc,
+  serverTimestamp,
+  getDoc,
+  onSnapshot,
+} from "firebase/firestore";
+import { auth, db } from "../firebase";
 
-// ✅ Create context
 const AuthContext = createContext();
 
-// ✅ Hook to use context
 export const useAuth = () => useContext(AuthContext);
 
-// ✅ Provider component
 const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 🔹 Sign Up
   const signUp = async (name, email, password) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -43,7 +45,6 @@ const AuthContextProvider = ({ children }) => {
     }
   };
 
-  // 🔹 Login
   const login = async (email, password) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -55,25 +56,12 @@ const AuthContextProvider = ({ children }) => {
     }
   };
 
-  // 🔹 Anonymous login (optional but you imported it)
-  const loginAnonymously = async () => {
-    try {
-      const userCredential = await signInAnonymously(auth);
-      setUser(userCredential.user);
-      return userCredential.user;
-    } catch (error) {
-      console.error("Anonymous login error:", error);
-      throw error;
-    }
-  };
-
-  // 🔹 Logout
   const logout = async () => {
     await signOut(auth);
     setUser(null);
+    setUserData(null);
   };
 
-  // 🔹 Track auth state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -82,14 +70,34 @@ const AuthContextProvider = ({ children }) => {
     return unsubscribe;
   }, []);
 
-  // 🔹 Context value
+  // Fetch Firestore record when user changes
+  useEffect(() => {
+    if (!user) {
+      setUserData(null);
+      return;
+    }
+
+    const userRef = doc(db, "users", user.uid);
+    const unsubscribe = onSnapshot(userRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setUserData(data);
+        console.log("✅ User record fetched:", data);
+      } else {
+        console.log("No user record found in Firestore.");
+      }
+    });
+
+    return unsubscribe;
+  }, [user]);
+
   const value = {
     user,
+    userData,
     setUser,
     signUp,
     login,
     logout,
-    loginAnonymously, // since it’s imported, we include it for completeness
   };
 
   return (
@@ -99,4 +107,4 @@ const AuthContextProvider = ({ children }) => {
   );
 };
 
-export default AuthContextProvider;
+export default AuthContextProvider
