@@ -10,10 +10,11 @@ import {
   setDoc,
   doc,
   serverTimestamp,
-  getDoc,
   onSnapshot,
+  getDoc,
 } from "firebase/firestore";
 import { auth, db } from "../firebase";
+import { toast } from "react-toastify";
 
 const AuthContext = createContext();
 
@@ -22,79 +23,116 @@ export const useAuth = () => useContext(AuthContext);
 const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
 
+  // 🔹 SIGN UP FUNCTION
   const signUp = async (name, email, password) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+      const createdUser = userCredential.user;
 
-      await updateProfile(user, { displayName: name });
+      // Update Firebase profile
+      await updateProfile(createdUser, { displayName: name });
 
-      await setDoc(doc(db, "users", user.uid), {
+      // Save user data in Firestore
+      await setDoc(doc(db, "users", createdUser.uid), {
         name,
         email,
         createdAt: serverTimestamp(),
       });
 
-      setUser(user);
-      return user;
+      toast.success("Account created successfully!");
+      setUser(createdUser);
+      return createdUser;
     } catch (error) {
       console.error("Signup error:", error);
-      throw error;
+
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          toast.error("This email is already registered.");
+          break;
+        case "auth/invalid-email":
+          toast.error("Invalid email address.");
+          break;
+        case "auth/weak-password":
+          toast.error("Password must be at least 6 characters.");
+          break;
+        case "auth/missing-email":
+          toast.error("Email field is required.");
+          break;
+        default:
+          toast.error("Signup failed. Please try again.");
+      }
     }
   };
 
+  // 🔹 LOGIN FUNCTION
   const login = async (email, password) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      setUser(userCredential.user);
-      return userCredential.user;
+      const loggedInUser = userCredential.user;
+
+      setUser(loggedInUser);
+      toast.success("Logged in successfully!");
+      return loggedInUser;
     } catch (error) {
       console.error("Login error:", error);
-      throw error;
+
+      switch (error.code) {
+        case "auth/invalid-credential":
+        case "auth/invalid-email":
+        case "auth/wrong-password":
+        case "auth/user-not-found":
+          toast.error("Invalid email or password.");
+          break;
+        default:
+          toast.error("Login failed. Try again.");
+      }
     }
   };
 
+  // 🔹 LOGOUT FUNCTION
   const logout = async () => {
-    await signOut(auth);
-    setUser(null);
-    setUserData(null);
+    try {
+      await signOut(auth);
+      setUser(null);
+      setUserData(null);
+      toast.info("Logged out successfully.");
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Failed to log out. Try again.");
+    }
   };
 
+  // 🔹 TRACK AUTH STATE
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
-      setLoading(false);
-    });
-    return unsubscribe;
-  }, []);
 
-  // Fetch Firestore record when user changes
-  useEffect(() => {
-    if (!user) {
-      setUserData(null);
-      return;
-    }
+      if (currentUser) {
+        const userRef = doc(db, "users", currentUser.uid);
 
-    const userRef = doc(db, "users", user.uid);
-    const unsubscribe = onSnapshot(userRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setUserData(data);
-        console.log("✅ User record fetched:", data);
+        // Listen for real-time updates
+        const unsubUser = onSnapshot(userRef, (snap) => {
+          if (snap.exists()) {
+            setUserData(snap.data());
+            console.log("✅ User data synced:", snap.data());
+          } else {
+            console.log("⚠️ No Firestore record found for this user");
+          }
+        });
+
+        return unsubUser;
       } else {
-        console.log("No user record found in Firestore.");
+        setUserData(null);
       }
     });
 
     return unsubscribe;
-  }, [user]);
+  }, []);
 
   const value = {
     user,
     userData,
-    setUser,
     signUp,
     login,
     logout,
@@ -102,9 +140,9 @@ const AuthContextProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };
 
-export default AuthContextProvider
+export default AuthContextProvider;

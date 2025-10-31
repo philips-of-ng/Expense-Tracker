@@ -12,11 +12,39 @@ const MainAppPage = () => {
 
   //GENERAL CODES --- GENERAL CODES --- GENERAL CODES
 
+  // CODE TO CALCULATE SOME SHIIIIII
 
-  //IMPORTING FUNCTIONS FROM CONTEXTS
-  const { uploadNewExpense } = useAppContext()
+  function getMonthlyExpense(transactions, month) {
+    return transactions
+      .filter(txn => txn.type === "expense" && txn.month === month)
+      .reduce((sum, txn) => sum + txn.amount, 0);
+  }
+
+  function getMonthlyIncome(transactions, month) {
+    return transactions
+      .filter(txn => txn.type === "income" && txn.month === month)
+      .reduce((sum, txn) => sum + txn.amount, 0);
+  }
+
+  function getMonthlySavingsRate(transactions, month) {
+    const income = getMonthlyIncome(transactions, month);
+    const expense = getMonthlyExpense(transactions, month);
+
+    // avoid dividing by zero if no income
+    if (income === 0) return 0;
+
+    const savings = income - expense;
+    const savingsRate = (savings / income) * 100;
+
+    return savingsRate.toFixed(2); // return as percentage, e.g., "45.67"
+  }
+
+
 
   const { userData } = useAuth()
+  useEffect(() => {
+    console.log('Userdata on the main app page', userData);
+  }, [userData])
 
   //this is used to set the active page -- home, receipts, charts, reminders
   const { tab, setTab } = useAppContext()
@@ -89,7 +117,7 @@ const MainAppPage = () => {
 
   useEffect(() => {
     if (query.trim() === "") {
-      setFiltered([]); // empty search → no results
+      setFiltered([]);
       return;
     }
 
@@ -154,14 +182,16 @@ const MainAppPage = () => {
         tab === 'home' ? (
           <div className='grow p-2 pb-20'>
 
-
-
             <div className='h-50 w-full  bg-appPurple border-4 rounded-xl bg my-4 text-white p-3'>
 
               <div className='flex justify-between'>
                 <div>
-                  <p>Hello, <b>Philips</b></p>
-                  <h1 className='text-4xl font-bold'>${userData.balance.toLocaleString()}</h1>
+                  <p>Hello, <b>{userData.name}</b></p>
+                  <h1 className='text-4xl font-bold'>
+                    {'$'}{userData && userData.balance !== undefined
+                      ? userData.balance.toLocaleString()
+                      : '0.00'}
+                  </h1>
                 </div>
 
                 <h2 className='text-center'>October, 2025</h2>

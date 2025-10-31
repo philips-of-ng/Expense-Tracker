@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Logo from '../components/Logo';
 import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-toastify';
 
 const Auth = () => {
   const [displaying, setDisplaying] = useState('signup');
@@ -13,20 +14,30 @@ const Auth = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
+      console.log('Object', { name: form.name, email: form.email, password: form.password });
+
       const response = await signUp(form.name, form.email, form.password)
       console.log('Response from sign up', response);
     } catch (error) {
       console.log('Error Signing up', error);
+      if (error.code === 'auth/email-already-in-use') {
+        toast.error('This email is associated with another account.')
+      }
     }
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await login(form.email, form.password)
+      console.log('Object', { email: loginForm.email, password: loginForm.password });
+
+      const response = await login(loginForm.email, loginForm.password)
       console.log('Response from sign in', response);
     } catch (error) {
       console.log('Error Signing in', error);
+      if (error.code === 'auth/invalid-email' || error.code === 'auth/invalid-credential') {
+        toast.error('Invalid email or password')
+      }
     }
   };
 
