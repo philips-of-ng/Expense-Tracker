@@ -186,7 +186,7 @@ const MainAppPage = () => {
 
               <div className='flex justify-between'>
                 <div>
-                  <p>Hello, <b>{userData.name}</b></p>
+                  <p>Hello, <b>{userData?.name}</b></p>
                   <h1 className='text-4xl font-bold'>
                     {'$'}{userData && userData.balance !== undefined
                       ? userData.balance.toLocaleString()

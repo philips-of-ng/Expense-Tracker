@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 
 const Auth = () => {
-  const [displaying, setDisplaying] = useState('signup');
+  const [displaying, setDisplaying] = useState('login');
 
   const { login, signUp } = useAuth()
 
