@@ -1,8 +1,15 @@
 import { createContext, useContext, useEffect, useState } from "react";
-// FIX 1: Added serverTimestamp to imports
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  query,
+  where,
+  onSnapshot,
+  orderBy,
+} from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage } from "../firebase"; // removed 'auth' since you use AuthContext
+import { db, storage } from "../firebase";
 import { useAuth } from "./AuthContext";
 
 const AppContext = createContext();
@@ -11,85 +18,92 @@ export const AppProvider = ({ children }) => {
   const { user: currentUser } = useAuth();
 
   const [tab, setTab] = useState("home");
-  // This state controls the loading spinner
   const [uploading, setUploading] = useState(false);
 
-  useEffect(() => {
-    console.log("This is the current tab", tab);
-  }, [tab]);
+  // NEW: State to hold the live data
+  const [transactions, setTransactions] = useState([]);
 
-  // Helper function to handle image upload
+  // NEW: Fetch Data Logic (Real-time)
+  useEffect(() => {
+    if (!currentUser) {
+      setTransactions([]); // Clear data if logged out
+      return;
+    }
+
+    // 1. Create a query to get ONLY this user's data
+    const q = query(
+      collection(db, "transactions"), // Make sure this matches your collection name
+      where("userId", "==", currentUser.uid)
+      // orderBy("date", "desc") // <--- Uncomment this later once you create an Index (I'll explain below)
+    );
+
+    // 2. Set up the listener
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const liveData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      console.log("Fetched Transactions:", liveData); // Debugging
+      setTransactions(liveData);
+    });
+
+    return () => unsubscribe(); // Cleanup listener on unmount
+  }, [currentUser]); // Re-run if user changes
+
+  // ... (Your existing uploadFileToStorage function stays here) ...
   const uploadFileToStorage = async (file) => {
     if (!file) return null;
-
-    // Create a unique path (e.g., "users/{userId}/expenses/image_name")
     const fileName = `${new Date().getTime()}_${file.name}`;
-
-    // Security: We save it under the specific user's folder
     const imageRef = ref(
       storage,
       `users/${currentUser.uid}/expenses/${fileName}`
     );
-
-    // Upload the image
     await uploadBytes(imageRef, file);
-
-    // Get its URL
-    const downloadURL = await getDownloadURL(imageRef);
-    return downloadURL;
+    return await getDownloadURL(imageRef);
   };
 
+  // ... (Your existing uploadNewExpense function stays here) ...
   const uploadNewExpense = async (payloadObject) => {
-    if (!currentUser) {
-      alert("You must be logged in");
-      return null;
-    }
-
-    setUploading(true); // Start loading
+    if (!currentUser) return null;
+    setUploading(true);
     let image_URLs = [];
 
     try {
-      // 1. Upload Image 1
       if (payloadObject.image1) {
         const url1 = await uploadFileToStorage(payloadObject.image1);
         if (url1) image_URLs.push(url1);
       }
-
-      // 2. Upload Image 2
       if (payloadObject.image2) {
         const url2 = await uploadFileToStorage(payloadObject.image2);
         if (url2) image_URLs.push(url2);
       }
 
-      // 3. Prepare data for Firestore
       const expenseData = {
         ...payloadObject,
-        image1: null, // Don't save raw file objects to DB
+        image1: null,
         image2: null,
-        imageURLs: image_URLs, // Save the array of links
+        imageURLs: image_URLs,
         userId: currentUser.uid,
-        createdAt: serverTimestamp(), // Uses server time
+        createdAt: serverTimestamp(),
       };
 
-      // 4. Save to 'transactions' collection (Matching your likely read logic)
-      // I changed this from 'expenses' to 'transactions' to match your earlier setup,
-      // but you can change it back if you prefer 'expenses'.
       const docRef = await addDoc(collection(db, "transactions"), expenseData);
-
-      alert("Expense successfully recorded!");
       return docRef.id;
     } catch (error) {
-      console.error("Failed to process expense upload:", error);
+      console.error(error);
       alert(error.message);
       return null;
     } finally {
-      setUploading(false); // Stop loading regardless of success/fail
+      setUploading(false);
     }
   };
 
   return (
-    // FIX 2: Passed 'uploading' to the value so the UI can use it
-    <AppContext.Provider value={{ tab, setTab, uploadNewExpense, uploading }}>
+    // NEW: Pass 'transactions' to the provider so the UI can read it
+    <AppContext.Provider
+      value={{ tab, setTab, uploadNewExpense, uploading, transactions }}
+    >
       {children}
     </AppContext.Provider>
   );

@@ -1,24 +1,27 @@
-import React from 'react';
-import { Pie } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  Title
-} from 'chart.js';
+import React from "react";
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from "chart.js";
 
-import transactions from '../assets/assets';
+// 1. IMPORT CONTEXT (Replaces static assets)
+import { useAppContext } from "../context/AppContext";
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
 const IncomeBreakdown = () => {
-  // Filter only income transactions
-  const incomes = transactions.filter(t => t.type === 'income');
+  // 2. GET LIVE DATA
+  const { transactions } = useAppContext();
 
-  // Group income by category
+  // Filter only income transactions
+  const incomes = transactions.filter((t) => t.type === "income");
+
+  // Group income by category (With Number Safety)
   const categoryTotals = incomes.reduce((acc, t) => {
-    acc[t.category] = (acc[t.category] || 0) + t.amount;
+    // Fallback for missing category
+    const category = t.category || "Others";
+    // Ensure amount is a number
+    const amount = Number(t.amount);
+
+    acc[category] = (acc[category] || 0) + amount;
     return acc;
   }, {});
 
@@ -29,19 +32,19 @@ const IncomeBreakdown = () => {
     labels,
     datasets: [
       {
-        label: 'Income by Source ($)',
+        label: "Income by Source ($)",
         data: dataValues,
         backgroundColor: [
-          '#42224a', // appPurple
-          '#8c6b96', // appPurpleLight
-          '#6b7280', // deep gray
-          '#22c55e', // green
-          '#3b82f6', // blue
-          '#eab308', // yellow
-          '#9ca3af', // mid gray
-          '#ef4444', // red (used minimally for contrast)
+          "#42224a", // appPurple
+          "#8c6b96", // appPurpleLight
+          "#6b7280", // deep gray
+          "#22c55e", // green
+          "#3b82f6", // blue
+          "#eab308", // yellow
+          "#9ca3af", // mid gray
+          "#ef4444", // red
         ],
-        borderColor: '#fff',
+        borderColor: "#fff",
         borderWidth: 2,
       },
     ],
@@ -52,14 +55,14 @@ const IncomeBreakdown = () => {
     plugins: {
       title: {
         display: true,
-        text: 'Income Breakdown by Source',
+        text: "Income Breakdown by Source",
         font: { size: 18 },
-        color: '#42224a',
+        color: "#42224a",
       },
       legend: {
-        position: 'right',
+        position: "right",
         labels: {
-          color: '#42224a',
+          color: "#42224a",
           font: { size: 14 },
         },
       },
@@ -67,6 +70,15 @@ const IncomeBreakdown = () => {
   };
 
   const totalIncome = dataValues.reduce((a, b) => a + b, 0);
+
+  // 3. HANDLE EMPTY STATE (Prevents empty chart ugliness)
+  if (incomes.length === 0) {
+    return (
+      <div className="bg-white shadow rounded-2xl p-5 border border-[--color-appPurpleLight] text-center text-gray-500">
+        <p>No income recorded yet.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white shadow rounded-2xl p-5 flex flex-col md:flex-row gap-6 border border-[--color-appPurpleLight]">
@@ -77,11 +89,13 @@ const IncomeBreakdown = () => {
 
       {/* Context */}
       <div className="flex-1">
-        <h3 className="text-lg font-semibold text-[--color-appPurple] mb-3">Context</h3>
+        <h3 className="text-lg font-semibold text-[--color-appPurple] mb-3">
+          Context
+        </h3>
         <ul className="flex flex-col gap-3">
           {labels.map((label, i) => (
             <li key={label} className="flex justify-between text-gray-700">
-              <span>{label}</span>
+              <span className="capitalize">{label}</span>
               <span>${dataValues[i].toFixed(2)}</span>
             </li>
           ))}

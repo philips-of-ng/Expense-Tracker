@@ -44,9 +44,9 @@ const Navbar = ({ page }) => {
         </button>
 
         <button
-          onClick={() => setTab('reminders')}
-          className={`${page == 'reminders' ? 'bg-appPurple text-white' : ''} flex flex-1 flex-col align-middle gap-1 py-2`}>
-          <i className='bxr  bx-bell text-3xl'></i>
+          onClick={() => setTab('settings')}
+          className={`${page == 'settings' ? 'bg-appPurple text-white' : ''} flex flex-1 flex-col align-middle gap-1 py-2`}>
+          <i className='bxr  bx-cog text-3xl'></i>
           Settings
         </button>
       </div>
