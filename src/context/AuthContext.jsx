@@ -24,6 +24,7 @@ const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
 
+  
   // 🔹 SIGN UP FUNCTION
   const signUp = async (name, email, password) => {
     try {

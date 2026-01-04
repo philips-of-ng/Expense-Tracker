@@ -12,11 +12,12 @@ import { AppProvider } from './context/AppContext.jsx'
 createRoot(document.getElementById('root')).render(
   <>
     <Provider store={store}>
-      <AppProvider>
-        <AuthContextProvider>
+      <AuthContextProvider>
+        <AppProvider>
           <App />
-        </AuthContextProvider>
-      </AppProvider>
+        </AppProvider>
+      </AuthContextProvider>
+
     </Provider>
   </>,
 )

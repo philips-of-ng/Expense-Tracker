@@ -12,6 +12,9 @@ const MainAppPage = () => {
 
   //GENERAL CODES --- GENERAL CODES --- GENERAL CODES
 
+  // IMPORTING CONTEXT FUNCTIONS
+  const { uploadNewExpense } = useAppContext()
+
   // CODE TO CALCULATE SOME SHIIIIII
 
   function getMonthlyExpense(transactions, month) {
@@ -176,7 +179,7 @@ const MainAppPage = () => {
 
 
   return (
-    <div className='flex flex-col justify-between border-4 border-green-600'>
+    <div className='flex flex-col justify-between'>
 
       {
         tab === 'home' ? (

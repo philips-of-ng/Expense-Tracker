@@ -23,7 +23,7 @@ function App() {
   }, [])
 
   return (
-    <div className='w-screen border-green-800'>
+    <div className='w-screen'>
       <ToastContainer />
       {
         user ? (
