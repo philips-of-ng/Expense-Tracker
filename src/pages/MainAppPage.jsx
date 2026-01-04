@@ -167,7 +167,7 @@ const MainAppPage = () => {
   });
 
   return (
-    <div className="flex flex-col justify-between h-screen">
+    <div className="flex flex-col justify-between h-screen bg-[#f8f7fc]">
       {/* ================= HOME TAB ================= */}
       {tab === "home" ? (
         <div className="grow p-2 pb-20 overflow-hidden flex flex-col">
@@ -703,7 +703,7 @@ const MainAppPage = () => {
                 >
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-white text-blue-500 rounded-xl shadow-sm">
-                      <i className="bx bx-export text-xl"></i>
+                      <i className="bx  bx-share text-xl"></i>
                     </div>
                     <span className="font-semibold text-gray-700">
                       Export CSV
@@ -737,7 +737,7 @@ const MainAppPage = () => {
                 >
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-white text-red-500 rounded-xl shadow-sm">
-                      <i className="bx bx-log-out text-xl"></i>
+                      <i className="bx  bx-arrow-out-right-square-half text-xl"></i>
                     </div>
                     <span className="font-semibold text-red-500">Log Out</span>
                   </div>

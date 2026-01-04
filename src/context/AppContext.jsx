@@ -6,93 +6,122 @@ import {
   query,
   where,
   onSnapshot,
-  orderBy,
 } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage } from "../firebase";
+
+// NOTE: We removed 'storage', 'ref', 'uploadBytes' imports
+import { db } from "../firebase";
 import { useAuth } from "./AuthContext";
 
 const AppContext = createContext();
+
+// ==========================================
+// 👇 PASTE YOUR CLOUDINARY DETAILS HERE 👇
+// ==========================================
+const CLOUD_NAME = "dak5lgud6"; // e.g. "demo"
+const UPLOAD_PRESET = "phintrackr_upload"; // e.g. "phintrackr_upload"
 
 export const AppProvider = ({ children }) => {
   const { user: currentUser } = useAuth();
 
   const [tab, setTab] = useState("home");
   const [uploading, setUploading] = useState(false);
-
-  // NEW: State to hold the live data
   const [transactions, setTransactions] = useState([]);
 
-  // NEW: Fetch Data Logic (Real-time)
   useEffect(() => {
     if (!currentUser) {
-      setTransactions([]); // Clear data if logged out
+      setTransactions([]);
       return;
     }
 
-    // 1. Create a query to get ONLY this user's data
     const q = query(
-      collection(db, "transactions"), // Make sure this matches your collection name
+      collection(db, "transactions"),
       where("userId", "==", currentUser.uid)
-      // orderBy("date", "desc") // <--- Uncomment this later once you create an Index (I'll explain below)
     );
 
-    // 2. Set up the listener
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const liveData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-
-      console.log("Fetched Transactions:", liveData); // Debugging
       setTransactions(liveData);
     });
 
-    return () => unsubscribe(); // Cleanup listener on unmount
-  }, [currentUser]); // Re-run if user changes
+    return () => unsubscribe();
+  }, [currentUser]);
 
-  // ... (Your existing uploadFileToStorage function stays here) ...
-  const uploadFileToStorage = async (file) => {
+  // 2. NEW: Cloudinary Upload Function
+  const uploadToCloudinary = async (file) => {
     if (!file) return null;
-    const fileName = `${new Date().getTime()}_${file.name}`;
-    const imageRef = ref(
-      storage,
-      `users/${currentUser.uid}/expenses/${fileName}`
-    );
-    await uploadBytes(imageRef, file);
-    return await getDownloadURL(imageRef);
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", UPLOAD_PRESET);
+    // Optional: Organize files in a specific Cloudinary folder
+    formData.append("folder", `users/${currentUser.uid}`);
+
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Cloudinary upload failed");
+      }
+
+      const data = await response.json();
+      console.log("Image uploaded to:", data.secure_url);
+      return data.secure_url; // This is the public link
+    } catch (error) {
+      console.error("Error uploading to Cloudinary:", error);
+      return null;
+    }
   };
 
-  // ... (Your existing uploadNewExpense function stays here) ...
+  // 3. Main Upload Logic (Updated)
   const uploadNewExpense = async (payloadObject) => {
-    if (!currentUser) return null;
+    if (!currentUser) {
+      alert("Please log in first.");
+      return null;
+    }
+
     setUploading(true);
     let image_URLs = [];
 
     try {
+      // Upload Image 1 to Cloudinary
       if (payloadObject.image1) {
-        const url1 = await uploadFileToStorage(payloadObject.image1);
+        const url1 = await uploadToCloudinary(payloadObject.image1);
         if (url1) image_URLs.push(url1);
       }
+
+      // Upload Image 2 to Cloudinary
       if (payloadObject.image2) {
-        const url2 = await uploadFileToStorage(payloadObject.image2);
+        const url2 = await uploadToCloudinary(payloadObject.image2);
         if (url2) image_URLs.push(url2);
       }
 
+      // Prepare data for Firestore
       const expenseData = {
         ...payloadObject,
-        image1: null,
+        image1: null, // Don't save raw file
         image2: null,
-        imageURLs: image_URLs,
+        imageURLs: image_URLs, // Save the Cloudinary links
         userId: currentUser.uid,
         createdAt: serverTimestamp(),
       };
 
+      // Save to Firestore (Stays the same)
       const docRef = await addDoc(collection(db, "transactions"), expenseData);
+
+      alert("Successfully saved!");
       return docRef.id;
     } catch (error) {
       console.error(error);
-      alert(error.message);
+      alert("Error saving transaction: " + error.message);
       return null;
     } finally {
       setUploading(false);
@@ -100,7 +129,6 @@ export const AppProvider = ({ children }) => {
   };
 
   return (
-    // NEW: Pass 'transactions' to the provider so the UI can read it
     <AppContext.Provider
       value={{ tab, setTab, uploadNewExpense, uploading, transactions }}
     >
